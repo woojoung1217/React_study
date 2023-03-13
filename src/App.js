@@ -5,83 +5,69 @@ import "./App.css";
 function App() {
   let [글제목, 글제목수정] = useState([
     "남자코트추천",
-    "여자코트추천",
-    "강남 맛집",
+    "강남우동 맛집",
+    "파이썬 독학",
   ]);
 
-  let [like, setlike] = useState(0);
+  let [like, setlike] = useState([0, 0, 0]);
   const [modal, setModal] = useState(false);
-  const [modal2, setModal2] = useState(false);
 
   return (
     <div className="App">
       <header className="header">
         <div className="font-white">blog</div>
       </header>
+      {글제목.map(function (a, i) {
+        return (
+          <div className="list">
+            <h4
+              onClick={() => {
+                setModal(true);
+              }}
+            >
+              {글제목[i]}
+            </h4>
 
+            <p>2월 18일 발행</p>
+            <span
+              onClick={() => {
+                let copy = [...like];
+                copy[i] = copy[i] + 1;
+                setlike(copy);
+              }}
+            >
+              좋아요 👍
+            </span>
+            {like[i]}
+            {modal == true ? (
+              <Modal 글제목={글제목} 글제목수정={글제목수정}></Modal>
+            ) : null}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function Modal(props) {
+  return (
+    <div className="modal">
+      <h4>{props.글제목[0]}</h4>
+      <p>날짜</p>
+      <p>상세내용</p>
       <button
         onClick={() => {
-          let copy = [...글제목];
-          copy.sort();
-          글제목수정(copy);
+          let copy = [...props.글제목];
+          copy[0] = "여자코트추천";
+          props.글제목수정(copy);
         }}
       >
-        글정렬
+        글수정
       </button>
-
-      {modal == true ? <Modal /> : null}
-
-      <div className="list">
-        <h4
-          onClick={() => {
-            setModal(!modal);
-          }}
-        >
-          {글제목[0]}
-          <span
-            onClick={() => {
-              setlike(like + 1);
-            }}
-          >
-            👍 {like}
-          </span>
-        </h4>
-        <p>2월17일 발행</p>
-      </div>
-
-      <div className="list">
-        {modal2 == true ? <Modal2></Modal2> : null}
-        <h4
-          onClick={() => {
-            setModal2(!modal2);
-          }}
-        >
-          {글제목[2]}
-        </h4>
-        <p>2월17일 발행</p>
-      </div>
     </div>
   );
 }
-function Modal() {
-  return (
-    <div className="modal">
-      <h4>제목</h4>
-      <p>날짜</p>
-      <p>상세내용</p>
-    </div>
-  );
-}
-function Modal2() {
-  return (
-    <div className="modal">
-      <h4>제목</h4>
-      <p>날짜</p>
-      <p>상세내용</p>
-      <h1>keyword</h1>
-    </div>
-  );
-}
+
 export default App;
 
 /* 많은 div 를 컴포넌트로 까지 들음 3월5일  */
