@@ -5,30 +5,32 @@ import "./App.css";
 function App() {
   let [글제목, 글제목수정] = useState([
     "남자코트추천",
-    "강남우동 맛집",
-    "파이썬 독학",
+    "강남 맛집",
+    "파이썬 독학 ",
   ]);
 
   let [like, setlike] = useState([0, 0, 0]);
-  const [modal, setModal] = useState(false);
+
+  let [modal, setmodal] = useState([false, false, false]);
 
   return (
     <div className="App">
-      <header className="header">
-        <div className="font-white">blog</div>
-      </header>
-      {글제목.map(function (a, i) {
+      <div className="header">
+        <h4 className="font-white">React Blog </h4>
+      </div>
+      {글제목.map(function (arg, i) {
         return (
-          <div className="list">
+          <div className="list" key={i}>
             <h4
               onClick={() => {
-                setModal(true);
+                let copy = [...modal];
+                copy[i] = !modal[i];
+                setmodal(copy);
               }}
             >
               {글제목[i]}
             </h4>
 
-            <p>2월 18일 발행</p>
             <span
               onClick={() => {
                 let copy = [...like];
@@ -36,38 +38,24 @@ function App() {
                 setlike(copy);
               }}
             >
-              좋아요 👍
+              좋아요 😃 {like[i]}
             </span>
-            {like[i]}
-            {modal == true ? (
-              <Modal 글제목={글제목} 글제목수정={글제목수정}></Modal>
-            ) : null}
+            <p>2월17일 발행</p>
+            {modal[i] == true ? <Modal 글제목={글제목} i={i} /> : null}
           </div>
         );
       })}
+      <input onChange={(e) => {}}></input>
     </div>
   );
 }
-
 function Modal(props) {
   return (
     <div className="modal">
-      <h4>{props.글제목[0]}</h4>
-      <p>날짜</p>
-      <p>상세내용</p>
-      <button
-        onClick={() => {
-          let copy = [...props.글제목];
-          copy[0] = "여자코트추천";
-          props.글제목수정(copy);
-        }}
-      >
-        글수정
-      </button>
+      <h4>제목 : {props.글제목[props.i]}</h4>
+      <p>작성자 : 윤우중 </p>
     </div>
   );
 }
 
 export default App;
-
-/* 많은 div 를 컴포넌트로 까지 들음 3월5일  */
