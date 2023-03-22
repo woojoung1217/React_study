@@ -1,4 +1,5 @@
 /*eslint-disable*/
+import { clear } from "@testing-library/user-event/dist/clear";
 import { useState } from "react";
 import "./App.css";
 
@@ -9,9 +10,15 @@ function App() {
     "파이썬 독학 ",
   ]);
 
+  const dateNow = new Date();
+  const today = dateNow.toISOString().slice(0, 10);
+  const [saleStartDate, setSaleStartDate] = useState(today);
+
   let [like, setlike] = useState([0, 0, 0]);
 
   let [modal, setmodal] = useState([false, false, false]);
+
+  let [입력값, 입력값수정] = useState("");
 
   return (
     <div className="App">
@@ -40,20 +47,74 @@ function App() {
             >
               좋아요 😃 {like[i]}
             </span>
-            <p>2월17일 발행</p>
+
+            <p>{today}</p>
+            <p>
+              {dateNow.getHours() + "시" + dateNow.getMinutes() + "분"} 작성{" "}
+            </p>
+            <button
+              onClick={() => {
+                let copy = [...글제목];
+                copy.splice(i, 1);
+                글제목수정(copy);
+              }}
+            >
+              글삭제
+            </button>
             {modal[i] == true ? <Modal 글제목={글제목} i={i} /> : null}
           </div>
         );
       })}
-      <input onChange={(e) => {}}></input>
+
+      <div className="input">
+        <input
+          className="center "
+          onChange={(e) => {
+            입력값수정(e.target.value);
+          }}
+        ></input>
+        <button
+          onClick={() => {
+            let copy = [...글제목];
+            copy.unshift(입력값);
+            글제목수정(copy);
+          }}
+        >
+          작성
+        </button>
+      </div>
     </div>
   );
 }
 function Modal(props) {
+  let [write, setwirte] = useState([]);
+  let [input, setinput] = useState("");
   return (
     <div className="modal">
       <h4>제목 : {props.글제목[props.i]}</h4>
       <p>작성자 : 윤우중 </p>
+      <input
+        className="modal-input"
+        onChange={(e) => {
+          setinput(e.target.value);
+        }}
+      ></input>
+      <button
+        onClick={() => {
+          let copy = [...write];
+          copy.unshift(input);
+          setwirte(copy);
+        }}
+      >
+        작성
+      </button>
+      {write.map(function (a, i) {
+        return (
+          <div className="li" key={i}>
+            {write[i]}
+          </div>
+        );
+      })}
     </div>
   );
 }
